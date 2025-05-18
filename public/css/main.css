@@ -1,0 +1,633 @@
+/* Reset and Base Styles */
+:root {
+    --primary-color: #FF6B35;
+    --primary-dark: #e85a2c;
+    --secondary-color: #1B3358;
+    --secondary-dark: #142744;
+    --text-color: #2c3e50;
+    --text-light: #666;
+    --border-color: #eee;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --header-height: 70px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Header Styles */
+.header {
+    background: #fff;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: var(--header-height);
+    width: 100%;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Logo */
+.logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    gap: 0.5rem;
+}
+
+.logo i {
+    font-size: 1.8rem;
+}
+
+/* Navigation */
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+/* Policy Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+}
+
+.dropdown-toggle i {
+    font-size: 0.8rem;
+    transition: transform 0.2s;
+}
+
+.dropdown:hover .dropdown-toggle i {
+    transform: rotate(180deg);
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 200px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.dropdown-content a:hover {
+    background: #f8f9fa;
+    color: var(--primary-color);
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 0.5rem;
+    width: 300px;
+}
+
+.search-bar input {
+    border: none;
+    background: none;
+    padding: 0.25rem 0.5rem;
+    width: 100%;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.search-bar button:hover {
+    color: var(--primary-color);
+}
+
+/* Banner Section */
+.banner {
+    background: var(--secondary-color);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+    width: 100%;
+}
+
+.banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.banner h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.banner p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+/* Featured Books Section */
+.featured-books {
+    padding: 4rem 0;
+    background: #fff;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--secondary-color);
+}
+
+/* Books Grid Layout */
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);  /* Show 2 books per row */
+    gap: 2rem;
+    padding: 0 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Book Card */
+.book-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    overflow: hidden;
+    transition: transform 0.2s;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: none;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.book-image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 140%; /* Aspect ratio for book cover */
+    overflow: hidden;
+    background-color: #f5f5f5;
+}
+
+.book-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.book-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    line-height: 1.4;
+    /* Ensure long titles don't overflow */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-info .author {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.book-info .description {
+    color: var(--text-light);
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.book-price {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: auto;
+    margin-bottom: 1rem;
+}
+
+.book-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.book-actions button {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.book-actions .btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.book-actions .btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.book-actions .btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.book-actions .btn-secondary:hover {
+    background: var(--secondary-dark);
+}
+
+/* Footer */
+.footer {
+    background: var(--secondary-color);
+    color: white;
+    padding: 4rem 0 2rem;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.footer-section p {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.footer-section a:hover {
+    opacity: 1;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* About Us Footer Section */
+.footer-about {
+    max-width: 400px;
+}
+
+.footer-about p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .search-bar {
+        width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .search-bar {
+        display: none;
+    }
+    
+    .header-content {
+        padding: 0 0.5rem;
+    }
+
+    .banner h1 {
+        font-size: 2rem;
+    }
+
+    .banner p {
+        font-size: 1rem;
+    }
+
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr); /* Keep 2 columns on tablets */
+        gap: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .book-info {
+        padding: 1rem;
+    }
+
+    .book-info h3 {
+        font-size: 1rem;
+    }
+
+    .book-price {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .book-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-about {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-buttons {
+        gap: 0.5rem;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        min-width: 70px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .logo span {
+        display: none;
+    }
+
+    .books-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    .book-image-container {
+        padding-top: 120%; /* Slightly shorter aspect ratio on mobile */
+    }
+}
+
+/* Cart Icon */
+.cart-icon {
+    position: relative;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Auth Buttons */
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-login {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-login:hover {
+    background: var(--secondary-dark);
+}
+
+.btn-register {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-register:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* User Menu */
+.user-menu {
+    position: relative;
+}
+
+.user-menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    text-decoration: none;
+}
+
+.user-menu-btn i {
+    font-size: 1.2rem;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.user-menu:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-menu hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 0.5rem 0;
+} 

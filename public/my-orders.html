@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">ShelfSwap</a>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/books.html" class="nav-link">Browse Books</a>
+            <div class="auth-links">
+                <div class="dropdown" id="userDropdown">
+                    <button class="dropdown-btn">
+                        <span id="userEmail"></span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/profile.html">Profile</a>
+                        <a href="/my-books.html" id="myBooksLink">My Books</a>
+                        <a href="/my-orders.html" class="active">My Orders</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="page-header">
+            <h1>My Orders</h1>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter-section">
+            <select id="statusFilter" class="form-control">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <!-- Orders List -->
+        <section class="orders-section">
+            <div class="orders-list" id="ordersList">
+                <!-- Orders will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <section class="pagination" id="pagination">
+            <!-- Pagination will be dynamically loaded here -->
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ShelfSwap</h3>
+                <p>A marketplace for students to buy and sell used academic books.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/books.html">Browse Books</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@shelfswap.com</p>
+                <p>Phone: +91 123-456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShelfSwap. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Messages -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/my-orders.js"></script>
+</body>
+</html> 

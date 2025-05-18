@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/cart.css">
+    <link rel="stylesheet" href="/css/cart-header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Cart Header -->
+    <header class="cart-header">
+        <div class="cart-header-content">
+            <div class="cart-header-title">
+                <i class="fas fa-shopping-cart"></i>
+                <h1>Shopping Cart</h1>
+            </div>
+            <nav class="cart-header-nav">
+                <a href="/" class="active">Home</a>
+                <a href="/books.html">Browse Books</a>
+                <a href="/orders.html">My Orders</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="cart-container">
+            <section class="cart-items">
+                <!-- Cart items will be loaded here -->
+                <p id="empty-cart-message" class="hidden">Your cart is empty. <a href="/books.html">Continue shopping</a>.</p>
+            </section>
+
+            <aside class="order-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotal">₹0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Charge</span>
+                    <span id="delivery-charge">₹49.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Platform Fee</span>
+                    <span id="platform-fee">₹19.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="total">₹0.00</span>
+                </div>
+                <div class="fee-info">
+                    <small>* Platform fee: ₹19 for orders below ₹500, ₹29 for orders above ₹500</small>
+                    <small>* Delivery charge: ₹49 per order</small>
+                </div>
+                <div class="checkout-info" style="background-color: #e9f7fd; padding: 10px; margin-bottom: 15px; border-radius: 5px; font-size: 0.9rem;">
+                    
+                </div>
+                <button id="checkout-btn" class="checkout-btn" disabled>
+                    Proceed to Checkout
+                </button>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/header-footer.js"></script>
+</body>
+</html> 

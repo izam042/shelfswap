@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Profile Header */
+        .profile-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .profile-header .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .profile-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .profile-header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+        }
+
+        /* Profile Container */
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .profile-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .profile-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background-color: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-header {
+                padding: 1.5rem 0;
+            }
+
+            .profile-header .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .profile-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="header">
+        <div class="logo">
+            <a href="/">
+                <span>ShelfSwap</span>
+            </a>
+        </div>
+        <div class="header-right">
+            <a href="/become-seller.html" id="becomeSeller" class="btn btn-outline">Become a Seller</a>
+            <a href="/cart.html" id="cartLink" class="btn btn-outline hidden">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+            <a href="/login.html" id="loginLink" class="btn btn-primary">Login</a>
+            <a href="/register.html" id="registerLink" class="btn btn-outline">Register</a>
+            
+            <!-- User dropdown (hidden by default, shown when logged in) -->
+            <div class="dropdown hidden" id="userDropdown">
+                <button class="dropdown-btn">
+                    <span id="userEmail">User</span>
+                    <i class="fas fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="/profile.html" class="active">Profile</a>
+                    <a href="/my-books.html" id="myBooksLink">My Books</a>
+                    <a href="/my-orders.html">My Orders</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="avatar">
+            <i class="fas fa-user"></i>
+        </div>
+        <h1 id="userName">Loading...</h1>
+        <p id="userEmailDisplay">Loading...</p>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="profile-container">
+            <!-- Profile Information -->
+            <section class="profile-section">
+                <h2>Personal Information</h2>
+                <form id="profileForm" class="profile-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Account Type</label>
+                        <input type="text" id="role" name="role" disabled>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </section>
+
+            <!-- Account Statistics -->
+            <section class="profile-section" id="accountStats">
+                <h2>Account Statistics</h2>
+                <div class="stats-grid">
+                    <!-- Stats will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ShelfSwap</h3>
+                <p>At ShelfSwap, we're on a mission to revolutionize how students access academic books.</p>
+                <p>Textbooks are expensive, and most second-hand platforms today act like unstructured classifieds—no payments, no delivery, no guarantees. We're changing that by offering a seamless, Amazon-like experience for used books that's built by students, for students.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/books.html">Browse Books</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@shelfswap.com</p>
+                <p>Phone: +91 123-456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShelfSwap. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Messages -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/profile.js"></script>
+</body>
+</html> 

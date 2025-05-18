@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ShelfSwap</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-links">
+            <div class="nav-brand">
+                <a href="index.html">ShelfSwap</a>
+            </div>
+            <div>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="books.html" class="nav-link">Browse Books</a>
+                <div class="dropdown" id="userDropdown">
+                    <button class="dropdown-btn">
+                        <span id="userEmail">Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="admin.html" class="nav-link active">Admin Dashboard</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Total Users</h3>
+                    <p id="totalUsers">Loading...</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Total Books</h3>
+                    <p id="totalBooks">Loading...</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Total Orders</h3>
+                    <p id="totalOrders">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-tab="users">Users</button>
+            <button class="tab-btn" data-tab="books">Books</button>
+            <button class="tab-btn" data-tab="orders">Orders</button>
+        </div>
+
+        <div class="admin-content">
+            <!-- Users Tab -->
+            <div class="tab-content active" id="users">
+                <div class="table-actions">
+                    <input type="text" placeholder="Search users..." id="userSearch" class="search-input">
+                    <button class="btn btn-primary" onclick="openAddUserModal()">
+                        <i class="fas fa-plus"></i> Add User
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Books Tab -->
+            <div class="tab-content" id="books">
+                <div class="table-actions">
+                    <input type="text" placeholder="Search books..." id="bookSearch" class="search-input">
+                    <div class="filter-group">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Law">Law</option>
+                            <option value="Business">Business</option>
+                            <option value="CompetitiveExams">Competitive Exams</option>
+                        </select>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="available">Available</option>
+                            <option value="sold">Sold</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody">
+                            <!-- Books will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div class="tab-content" id="orders">
+                <div class="table-actions">
+                    <input type="text" placeholder="Search orders..." id="orderSearch" class="search-input">
+                    <div class="filter-group">
+                        <select id="orderStatusFilter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Book</th>
+                                <th>Buyer</th>
+                                <th>Seller</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <h2 id="userModalTitle">Add User</h2>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userName">Full Name</label>
+                    <input type="text" id="userName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="email" id="userEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword">Password</label>
+                    <input type="password" id="userPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Role</label>
+                    <select id="userRole" class="form-control" required>
+                        <option value="buyer">Buyer</option>
+                        <option value="seller">Seller</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html> 

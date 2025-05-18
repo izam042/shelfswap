@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Books - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">ShelfSwap</a>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/books.html" class="nav-link">Browse Books</a>
+            <div class="auth-links">
+                <a href="/login.html" id="loginLink">Login</a>
+                <a href="/register.html" id="registerLink">Register</a>
+                <div class="dropdown hidden" id="userDropdown">
+                    <button class="dropdown-btn">
+                        <span id="userEmail"></span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/profile.html">Profile</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="my-books-container">
+            <div class="page-header">
+                <h1>My Books</h1>
+                <a href="/sell.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> List New Book
+                </a>
+            </div>
+
+            <div class="books-grid" id="myBooksGrid">
+                <!-- Books will be loaded here dynamically -->
+            </div>
+
+            <div class="no-books hidden" id="noBooksMessage">
+                <p>You haven't listed any books yet.</p>
+                <a href="/sell.html" class="btn btn-primary">List Your First Book</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ShelfSwap</h3>
+                <p>A marketplace for students to buy and sell used academic books.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/books.html">Browse Books</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@shelfswap.com</p>
+                <p>Phone: +91 123-456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShelfSwap. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Messages -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await getCurrentUser();
+            if (!user) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            if (user.role !== 'seller') {
+                window.location.href = '/become-seller.html';
+                return;
+            }
+
+            // Load seller's books
+            try {
+                showLoadingSpinner();
+                const response = await fetch('/api/sellers/books', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                const books = await response.json();
+
+                if (response.ok) {
+                    const booksGrid = document.getElementById('myBooksGrid');
+                    const noBooksMessage = document.getElementById('noBooksMessage');
+
+                    if (books.length === 0) {
+                        booksGrid.classList.add('hidden');
+                        noBooksMessage.classList.remove('hidden');
+                    } else {
+                        booksGrid.classList.remove('hidden');
+                        noBooksMessage.classList.add('hidden');
+
+                        booksGrid.innerHTML = books.map(book => `
+                            <div class="book-card">
+                                <img src="${book.image_url}" alt="${book.title}" class="book-image">
+                                <div class="book-info">
+                                    <h3>${book.title}</h3>
+                                    <p class="author">${book.author}</p>
+                                    <p class="price">₹${book.price}</p>
+                                    <p class="condition">${book.condition}</p>
+                                    <p class="status ${book.status}">${book.status}</p>
+                                </div>
+                                <div class="book-actions">
+                                    <button class="btn btn-secondary edit-book" data-id="${book.id}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger delete-book" data-id="${book.id}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+
+                        // Add event listeners for edit and delete buttons
+                        document.querySelectorAll('.edit-book').forEach(button => {
+                            button.addEventListener('click', (e) => {
+                                const bookId = e.target.closest('.edit-book').dataset.id;
+                                window.location.href = `/edit-book.html?id=${bookId}`;
+                            });
+                        });
+
+                        document.querySelectorAll('.delete-book').forEach(button => {
+                            button.addEventListener('click', async (e) => {
+                                const bookId = e.target.closest('.delete-book').dataset.id;
+                                if (confirm('Are you sure you want to delete this book?')) {
+                                    try {
+                                        const response = await fetch(`/api/sellers/books/${bookId}`, {
+                                            method: 'DELETE',
+                                            headers: {
+                                                'Authorization': `Bearer ${getToken()}`
+                                            }
+                                        });
+
+                                        if (response.ok) {
+                                            showToast('Book deleted successfully', 'success');
+                                            // Reload the page to update the list
+                                            window.location.reload();
+                                        } else {
+                                            const data = await response.json();
+                                            showToast(data.message || 'Failed to delete book', 'error');
+                                        }
+                                    } catch (err) {
+                                        console.error('Error deleting book:', err);
+                                        showToast('Error deleting book. Please try again.', 'error');
+                                    }
+                                }
+                            });
+                        });
+                    }
+                } else {
+                    showToast('Failed to load your books', 'error');
+                }
+            } catch (err) {
+                console.error('Error loading books:', err);
+                showToast('Error loading books. Please try again.', 'error');
+            } finally {
+                hideLoadingSpinner();
+            }
+        });
+    </script>
+</body>
+</html> 

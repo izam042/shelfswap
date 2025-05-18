@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .book-thumbnail {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .book-thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .image-preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-preview-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .close-preview {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .tab-container {
+            margin-top: 20px;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+        
+        .tab-button.active {
+            border-bottom: 2px solid #4a69bd;
+            background: #fff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .order-details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .order-details-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90%;
+            overflow: auto;
+        }
+        
+        .order-status-badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        
+        .status-pending { background-color: #ffe082; color: #7f6000; }
+        .status-processing { background-color: #90caf9; color: #0d47a1; }
+        .status-shipped { background-color: #80cbc4; color: #004d40; }
+        .status-delivered { background-color: #a5d6a7; color: #1b5e20; }
+        .status-cancelled { background-color: #ef9a9a; color: #b71c1c; }
+        .status-returned { background-color: #ce93d8; color: #4a148c; }
+        
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-controls {
+                flex-direction: column;
+            }
+        }
+
+        .order-details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .order-items-section, .order-notes-section {
+            grid-column: span 2;
+        }
+        
+        .seller-info-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #4a69bd;
+        }
+        
+        .seller-info-section h5 {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #4a69bd;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        
+        .seller-popup {
+            z-index: 1100;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 5px;
+            max-width: 300px;
+        }
+        
+        .seller-popup-content {
+            padding: 15px;
+        }
+        
+        .seller-popup h4 {
+            margin-top: 0;
+            color: #4a69bd;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        .seller-popup h5 {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #4a69bd;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        
+        .order-items-table, .order-totals-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .order-items-table th, .order-items-table td,
+        .order-totals-table th, .order-totals-table td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .order-items-table th, .order-totals-table th {
+            background-color: #f5f5f5;
+        }
+        
+        .order-total-row {
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+        
+        .order-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .order-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-items-section, .order-notes-section {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">ShelfSwap</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/browse.html">Browse Books</a>
+                <a href="/cart.html">Cart</a>
+                <a href="/profile.html">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>Admin Dashboard</h1>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p id="total-users">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Books</h3>
+                <p id="total-books">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Orders</h3>
+                <p id="total-orders">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Pending Sellers</h3>
+                <p id="pending-sellers">0</p>
+            </div>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tab-navigation">
+                <button class="tab-button" id="sellers-button">Pending Sellers</button>
+                <button class="tab-button" id="books-button">Pending Books</button>
+                <button class="tab-button" id="orders-button">Orders</button>
+            </div>
+            
+            <div id="sellers-tab" class="tab-content" style="border: 2px solid red;">
+                <section class="pending-sellers">
+                    <h2>Pending Seller Applications</h2>
+                    <table id="pending-sellers-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Location</th>
+                                <th>Applied Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Seller applications will be loaded here -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <div id="books-tab" class="tab-content" style="border: 2px solid blue;">
+                <section class="pending-books">
+                    <h2>Pending Book Listings</h2>
+                    <table id="pending-books">
+                        <thead>
+                            <tr>
+                                <th>Images</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Seller</th>
+                                <th>Price</th>
+                                <th>Condition</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Pending books will be loaded here -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <div id="orders-tab" class="tab-content" style="border: 2px solid green;">
+                <section class="orders">
+                    <h2>Order Management</h2>
+                    
+                    <div class="filter-controls">
+                        <div class="form-group">
+                            <label for="order-status-filter">Filter by Status</label>
+                            <select id="order-status-filter" class="form-control">
+                                <option value="">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="returned">Returned</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="order-search">Search</label>
+                            <input type="text" id="order-search" class="form-control" placeholder="Order ID, Name, Book...">
+                        </div>
+                        
+                        <button id="apply-order-filters" class="btn btn-primary">Apply Filters</button>
+                        <button id="reset-order-filters" class="btn btn-outline">Reset</button>
+                    </div>
+                    
+                    <table id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Reference</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Orders will be loaded here -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div id="loading" class="loading-spinner hidden"></div>
+    <div id="toast" class="toast hidden"></div>
+
+    <div id="image-preview-modal" class="image-preview-modal">
+        <span class="close-preview">&times;</span>
+        <div class="image-preview-content">
+            <h3>Book Images</h3>
+            <div class="image-preview-grid">
+                <!-- Preview images will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="order-details-modal" class="order-details-modal">
+        <span class="close-preview">&times;</span>
+        <div class="order-details-content">
+            <h3>Order Details</h3>
+            <div id="order-details-container">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Simple Tab Functionality -->
+    <script>
+        // Make sure tab functionality works regardless of any other scripts
+        (function() {
+            // This function will run immediately
+            function setupTabs() {
+                // Get all tab elements
+                var sellerTab = document.getElementById('sellers-tab');
+                var booksTab = document.getElementById('books-tab');
+                var ordersTab = document.getElementById('orders-tab');
+                
+                // Get all buttons
+                var sellerBtn = document.getElementById('sellers-button');
+                var booksBtn = document.getElementById('books-button');
+                var ordersBtn = document.getElementById('orders-button');
+                
+                if (!sellerTab || !booksTab || !ordersTab) {
+                    console.error('Tab elements missing!');
+                    console.log('sellers-tab exists:', !!sellerTab);
+                    console.log('books-tab exists:', !!booksTab);
+                    console.log('orders-tab exists:', !!ordersTab);
+                    return;
+                }
+                
+                // Make sure all tabs start hidden except first one
+                sellerTab.style.display = 'block';
+                booksTab.style.display = 'none';
+                ordersTab.style.display = 'none';
+                
+                // Make first button active
+                sellerBtn.classList.add('active');
+                booksBtn.classList.remove('active');
+                ordersBtn.classList.remove('active');
+                
+                // Set up click handlers
+                sellerBtn.onclick = function() {
+                    console.log('Seller tab button clicked');
+                    sellerTab.style.display = 'block';
+                    booksTab.style.display = 'none';
+                    ordersTab.style.display = 'none';
+                    sellerBtn.classList.add('active');
+                    booksBtn.classList.remove('active');
+                    ordersBtn.classList.remove('active');
+                    return false;
+                };
+                
+                booksBtn.onclick = function() {
+                    console.log('Books tab button clicked');
+                    sellerTab.style.display = 'none';
+                    booksTab.style.display = 'block';
+                    ordersTab.style.display = 'none';
+                    sellerBtn.classList.remove('active');
+                    booksBtn.classList.add('active');
+                    ordersBtn.classList.remove('active');
+                    return false;
+                };
+                
+                ordersBtn.onclick = function() {
+                    console.log('Orders tab button clicked');
+                    sellerTab.style.display = 'none';
+                    booksTab.style.display = 'none';
+                    ordersTab.style.display = 'block';
+                    sellerBtn.classList.remove('active');
+                    booksBtn.classList.remove('active');
+                    ordersBtn.classList.add('active');
+                    return false;
+                };
+            }
+            
+            // If document is already loaded, run setup now
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                console.log('Document already loaded, running setup now');
+                setupTabs();
+            } else {
+                // Otherwise set up event to run when document is loaded
+                console.log('Setting up load event handler');
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log('Document loaded, running setup');
+                    setupTabs();
+                });
+            }
+        })(); // Run immediately
+    </script>
+
+    <!-- Main dashboard functionality -->
+    <script src="/js/admin-dashboard.js"></script>
+</body>
+</html> 

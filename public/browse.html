@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Books - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="header">
+        <div class="logo">
+            <a href="/">
+                <span>ShelfSwap</span>
+            </a>
+        </div>
+        <div class="header-right">
+            <!-- Auth links will be shown/hidden based on login status -->
+            <a href="/become-seller.html" id="becomeSeller" class="btn btn-outline">Become a Seller</a>
+            <a href="/cart.html" id="cartLink" class="btn btn-outline hidden">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+            <a href="/login.html" id="loginLink" class="btn btn-primary">Login</a>
+            <a href="/register.html" id="registerLink" class="btn btn-outline">Register</a>
+            
+            <!-- User dropdown (hidden by default, shown when logged in) -->
+            <div class="dropdown hidden" id="userDropdown">
+                <button class="dropdown-btn">
+                    <span id="userEmail">User</span>
+                    <i class="fas fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <!-- Will be populated by auth.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="search-section">
+            <form id="search-form" class="search-form">
+                <input type="text" id="search-input" placeholder="Search by title, author, or category..." required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div class="filters">
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Law">Law</option>
+                    <option value="Business">Business</option>
+                    <option value="CompetitiveExams">Competitive Exams</option>
+                </select>
+                <select id="condition-filter">
+                    <option value="">All Conditions</option>
+                    <option value="new">New</option>
+                    <option value="like_new">Like New</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                </select>
+                <select id="price-filter">
+                    <option value="">All Prices</option>
+                    <option value="0-100">Under ₹100</option>
+                    <option value="100-500">₹100 - ₹500</option>
+                    <option value="500-1000">₹500 - ₹1000</option>
+                    <option value="1000+">Over ₹1000</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="books-grid" class="books-grid">
+            <!-- Books will be loaded here -->
+        </div>
+
+        <div id="loading" class="loading-spinner hidden"></div>
+        <div id="toast" class="toast hidden"></div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/browse.js"></script>
+</body>
+</html> 

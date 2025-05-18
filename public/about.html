@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Hero Section */
+        .about-hero {
+            background-color: var(--secondary-color);
+            position: relative;
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .about-hero p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Main Content */
+        .about-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 1.5rem;
+        }
+
+        .section-divider {
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 0 0 2rem;
+            border-radius: 2px;
+        }
+
+        .about-section {
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .about-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .about-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Mission Section */
+        .mission-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .mission-image {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-image:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .mission-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .mission-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .feature-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-item:hover::before {
+            width: 100%;
+            opacity: 0.05;
+        }
+
+        .feature-item i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover i {
+            transform: scale(1.2);
+        }
+
+        .feature-item h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        /* Team Section */
+        .team-section {
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .team-photo {
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .team-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .team-member:hover .team-photo img {
+            transform: scale(1.05);
+        }
+
+        .team-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .team-info h3 {
+            margin: 0 0 0.5rem;
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+        }
+
+        .team-info p.role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .team-info p.bio {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Impact Section */
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        /* Call To Action */
+        .cta-section {
+            text-align: center;
+            background: var(--secondary-color);
+            padding: 4rem 2rem;
+            border-radius: 12px;
+            color: white;
+            margin-top: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-cta {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-cta {
+            background: var(--primary-color);
+            color: white;
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-primary-cta:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .btn-secondary-cta {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary-cta:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .about-hero {
+                padding: 4rem 0;
+            }
+
+            .about-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .about-hero p {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                padding: 3rem 1rem;
+            }
+
+            .about-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .mission-container {
+                flex-direction: column;
+            }
+
+            .mission-image {
+                order: -1;
+            }
+
+            .team-photo {
+                height: 250px;
+            }
+
+            .cta-section h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .stat-number {
+                font-size: 2.2rem;
+            }
+
+            .btn-cta {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="about-hero-content">
+            <h1>About ShelfSwap</h1>
+            <p>Revolutionizing how students access academic books in India through a sustainable, student-powered marketplace</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="about-content">
+        <!-- Mission Section -->
+        <div class="about-section" id="mission">
+            <div class="section-divider"></div>
+            <h2>Our Mission</h2>
+            <div class="mission-container">
+                <div class="mission-text">
+                    <p>At ShelfSwap, we're on a mission to revolutionize how students access academic books in India by creating a sustainable, affordable, and efficient marketplace.</p>
+            <p>Textbooks are expensive, and most second-hand platforms today act like unstructured classifieds—no payments, no delivery, no guarantees. We're changing that by offering a seamless, Amazon-like experience for used books that's built by students, for students.</p>
+                </div>
+                <div class="mission-image">
+                    <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Books on a shelf">
+                </div>
+            </div>
+        </div>
+
+        <!-- What We Do Section -->
+        <div class="about-section" id="what-we-do">
+            <div class="section-divider"></div>
+            <h2>What We Do</h2>
+            <p>We're building India's first fully standardized second-hand academic bookstore, where every transaction is smooth, safe, and reliable. ShelfSwap handles everything from payments to delivery, ensuring a hassle-free experience for both buyers and sellers.</p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>Secure Payments</h3>
+                    <p>Multiple payment options with secure transaction processing and buyer protection policies</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-truck"></i>
+                    <h3>Doorstep Service</h3>
+                    <p>Convenient pickup from sellers and delivery to buyers, right at your doorstep</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-box-open"></i>
+                    <h3>Quality Verification</h3>
+                    <p>Thorough inspection and standardized quality grading for all books</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-percentage"></i>
+                    <h3>Affordable Pricing</h3>
+                    <p>Up to 70% off retail prices for buyers and maximum returns for sellers</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Our Impact Section -->
+        <div class="about-section" id="impact">
+            <div class="section-divider"></div>
+            <h2>Our Impact</h2>
+            <p>Beyond logistics, we're creating something bigger: a student-powered education economy that makes learning more accessible while reducing waste.</p>
+            
+            <p>Every book swapped helps reduce educational waste, makes learning more affordable, and empowers students to support each other's growth. Whether you're clearing out last semester's shelf or preparing for the next, ShelfSwap makes it effortless—and impactful.</p>
+        </div>
+
+        <!-- Call to Action Section -->
+        <div class="cta-section">
+            <div class="cta-content">
+                <h2>Join the ShelfSwap Community</h2>
+                <p>Whether you're looking to buy affordable textbooks or sell your used ones, ShelfSwap makes it easy and rewarding.</p>
+                <div class="cta-buttons">
+                    <a href="/browse.html" class="btn-cta btn-primary-cta">Browse Books</a>
+                    <a href="/sell.html" class="btn-cta btn-secondary-cta">Sell Your Books</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/header-footer.js"></script>
+    
+    <!-- Scroll Animation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Scroll animation for sections
+            const sections = document.querySelectorAll('.about-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html> 

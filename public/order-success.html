@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .success-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .success-icon {
+            color: #4CAF50;
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .order-details {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .order-details h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .order-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .detail-value {
+            color: var(--text-light);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(var(--primary-color-rgb), 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <main class="success-container">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h1 class="success-title">Order Placed Successfully!</h1>
+        <p class="success-message">
+            Thank you for your order. We've received your order and will process it right away.
+            You'll receive a confirmation email shortly with your order details.
+        </p>
+
+        <div class="order-details">
+            <h3>Order Information</h3>
+            <div class="order-detail-row">
+                <span class="detail-label">Order Reference:</span>
+                <span class="detail-value" id="orderId">Loading...</span>
+            </div>
+            <div class="order-detail-row">
+                <span class="detail-label">Order Date:</span>
+                <span class="detail-value" id="orderDate">Loading...</span>
+            </div>
+            <div class="order-detail-row">
+                <span class="detail-label">Total Amount:</span>
+                <span class="detail-value" id="orderTotal">Loading...</span>
+            </div>
+            <div class="order-detail-row">
+                <span class="detail-label">Shipping Address:</span>
+                <span class="detail-value" id="shippingAddress">Loading...</span>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/my-orders.html" class="btn btn-primary">
+                <i class="fas fa-list"></i> View My Orders
+            </a>
+            <a href="/books.html" class="btn btn-secondary">
+                <i class="fas fa-shopping-cart"></i> Continue Shopping
+            </a>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/header-footer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if user is logged in
+            if (!isAuthenticated()) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get order ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+            
+            if (!orderId) {
+                document.querySelector('.success-message').textContent = 'Order information not found.';
+                return;
+            }
+
+            try {
+                // First try to get from localStorage (fallback orders)
+                let orderData = findLocalOrder(orderId);
+                
+                // If not found locally, fetch from API
+                if (!orderData) {
+                    // Try both endpoints
+                    let response = await fetch(`/api/orders/${orderId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${getToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        // If first endpoint fails, try admin endpoint
+                        response = await fetch(`/api/admin/orders/${orderId}`, {
+                            headers: {
+                                'Authorization': `Bearer ${getToken()}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch order details');
+                        }
+                    }
+
+                    orderData = await response.json();
+                }
+                
+                // Handle both single-item and multi-item order formats
+                if (orderData.order) {
+                    // If the response has an order property (from order creation)
+                    orderData = orderData.order;
+                }
+                
+                displayOrderDetails(orderData);
+                
+                // Clear cart (just to be sure)
+                localStorage.removeItem('cart');
+                if (typeof updateCartCount === 'function') {
+                    updateCartCount();
+                }
+            } catch (err) {
+                console.error('Error loading order details:', err);
+                document.querySelector('.success-message').textContent = 'Unable to load order details. Please check My Orders for more information.';
+            }
+        });
+        
+        // Find an order in localStorage (for fallback orders)
+        function findLocalOrder(orderRef) {
+            // Try to find in userOrders
+            const userOrders = JSON.parse(localStorage.getItem('userOrders') || '[]');
+            let order = userOrders.find(o => o.order_reference === orderRef || o.id === orderRef);
+            
+            // Also try orderHistory
+            if (!order) {
+                const orderHistory = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                order = orderHistory.find(o => o.order_reference === orderRef || o.id === orderRef);
+            }
+            
+            return order;
+        }
+        
+        // Display order details
+        function displayOrderDetails(orderData) {
+            // Display order reference/ID
+            const orderIdElement = document.getElementById('orderId');
+            orderIdElement.textContent = orderData.order_reference || orderData.id;
+            
+            // Display order date
+            const orderDateElement = document.getElementById('orderDate');
+            const orderDate = orderData.created_at ? new Date(orderData.created_at) : new Date();
+            orderDateElement.textContent = orderDate.toLocaleString();
+            
+            // Display order total
+            const orderTotalElement = document.getElementById('orderTotal');
+            const total = orderData.order_total || orderData.total_amount || orderData.total || 0;
+            const shippingFee = orderData.shipping_fee || 49;
+            const platformFee = orderData.platform_fee || 19;
+            const finalTotal = parseFloat(total) + parseFloat(shippingFee) + parseFloat(platformFee);
+            orderTotalElement.textContent = `₹${finalTotal.toFixed(2)}`;
+            
+            // Display shipping address
+            const shippingAddressElement = document.getElementById('shippingAddress');
+            
+            // Build address string based on available fields
+            let addressParts = [];
+            
+            if (orderData.full_name) addressParts.push(orderData.full_name);
+            if (orderData.address_line1) addressParts.push(orderData.address_line1);
+            if (orderData.address_line2) addressParts.push(orderData.address_line2);
+            if (orderData.city) addressParts.push(orderData.city);
+            if (orderData.state) addressParts.push(orderData.state);
+            if (orderData.postal_code) addressParts.push(orderData.postal_code);
+            if (orderData.country) addressParts.push(orderData.country);
+            
+            shippingAddressElement.textContent = addressParts.join(', ') || 'Address not available';
+        }
+    </script>
+</body>
+</html> 

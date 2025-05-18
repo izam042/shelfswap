@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        /* Enhanced styles for auth pages */
+        .auth-container {
+            background-color: #f9f9f9;
+            padding: 3rem 1rem;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .auth-box {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+        
+        .auth-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 0.85rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+            background-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #e85d29;
+        }
+        
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .auth-divider span {
+            flex: 1;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+        
+        .auth-divider p {
+            margin: 0 10px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .social-login {
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-social {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            background-color: white;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-social:hover {
+            background-color: #f8f8f8;
+        }
+        
+        .btn-social img {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .auth-links {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        
+        .auth-links a {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .auth-footer {
+            font-size: 0.85rem;
+            text-align: center;
+            color: #888;
+            margin-top: 2rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="/">
+                    <span>ShelfSwap</span>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="/index.html" id="becomeSeller" class="btn btn-outline">Home</a>
+                <a href="/login.html" id="loginLink" class="btn btn-primary">Login</a>
+                
+                <!-- User dropdown (hidden by default, shown when logged in) -->
+                <div class="dropdown hidden" id="userDropdown">
+                    <button class="dropdown-btn">
+                        <span id="userEmail">User</span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <!-- Will be populated by auth.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2>Create an Account</h2>
+                
+                <!-- Social Registration -->
+                <div class="social-login">
+                    <div id="g_id_onload"
+                        data-client_id="737633377213-pf9p4vtanb6er0fmocrmiicaks2uacrm.apps.googleusercontent.com"
+                        data-context="signin"
+                        data-callback="handleGoogleSignIn"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin" 
+                        data-type="standard" 
+                        data-size="large" 
+                        data-theme="outline" 
+                        data-text="signup_with" 
+                        data-shape="rectangular" 
+                        data-logo_alignment="left">
+                    </div>
+                </div>
+                
+                <!-- OR divider -->
+                <div class="auth-divider">
+                    <span></span>
+                    <p>OR</p>
+                    <span></span>
+                </div>
+                
+                <!-- Registration Form -->
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required placeholder="Your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required placeholder="Choose a strong password">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="registerBtn">
+                        <span>Create Account</span>
+                        <div class="spinner hidden"></div>
+                    </button>
+                </form>
+                
+                <div class="auth-links">
+                    <p>Already have an account? <a href="/login.html">Sign in</a></p>
+                </div>
+                
+                <div class="auth-footer">
+                    <p>By signing up, you agree to ShelfSwap's Terms of Service and Privacy Policy</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/books.html">Browse Books</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: cxo@shelfswap.com</p>
+                
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShelfSwap. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Messages -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script>
+        // Regular registration form handler
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Show loading state
+            const registerBtn = document.getElementById('registerBtn');
+            const btnText = registerBtn.querySelector('span');
+            const spinner = registerBtn.querySelector('.spinner');
+            btnText.textContent = 'Creating Account...';
+            spinner.classList.remove('hidden');
+            registerBtn.disabled = true;
+            
+            try {
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                await register(name, email, password);
+                
+                // Check if there's a redirect URL stored
+                const redirectURL = localStorage.getItem('redirectAfterLogin');
+                if (redirectURL) {
+                    localStorage.removeItem('redirectAfterLogin');
+                    window.location.href = redirectURL;
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast('Error during registration. Please try again.', 'error');
+                
+                // Reset button state
+                btnText.textContent = 'Create Account';
+                spinner.classList.add('hidden');
+                registerBtn.disabled = false;
+            }
+        });
+        
+        // Google Sign-Up callback function
+        function handleGoogleSignIn(response) {
+            // Get the ID token from the response
+            const idToken = response.credential;
+            
+            // For debugging
+            console.log("Received Google sign-in response");
+            
+            // Use the handler for Google authentication
+            handleGoogleAuth(idToken)
+                .catch(error => {
+                    console.error('Google sign-up error:', error);
+                    showToast('Error during Google sign-up. Please try again.', 'error');
+                });
+        }
+        
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+        
+        function showLoadingSpinner() {
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+        }
+        
+        function hideLoadingSpinner() {
+            document.getElementById('loadingSpinner').classList.add('hidden');
+        }
+    </script>
+</body>
+</html> 

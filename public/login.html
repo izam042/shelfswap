@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        /* Enhanced styles for auth pages */
+        .auth-container {
+            background-color: #f9f9f9;
+            padding: 3rem 1rem;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .auth-box {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+        
+        .auth-box h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 0.85rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+        }
+        
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .auth-divider span {
+            flex: 1;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+        
+        .auth-divider p {
+            margin: 0 10px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .social-login {
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-social {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            background-color: white;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-social:hover {
+            background-color: #f8f8f8;
+        }
+        
+        .btn-social img {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .auth-links {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        
+        .auth-links a {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .auth-footer {
+            font-size: 0.85rem;
+            text-align: center;
+            color: #888;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="/">
+                    <span>ShelfSwap</span>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="/cart.html" id="cartLink" class="btn btn-outline hidden">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </a>
+                <a href="/index.html" id="homelink" class="btn btn-primary">Home</a>
+                <a href="/register.html" id="registerLink" class="btn btn-outline">Register</a>
+                
+                <!-- User dropdown (hidden by default, shown when logged in) -->
+                <div class="dropdown hidden" id="userDropdown">
+                    <button class="dropdown-btn">
+                        <span id="userEmail">User</span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <!-- Will be populated by auth.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2>Welcome Back</h2>
+                
+                <!-- Social Login -->
+                <div class="social-login">
+                    <div id="g_id_onload"
+                        data-client_id="737633377213-pf9p4vtanb6er0fmocrmiicaks2uacrm.apps.googleusercontent.com"
+                        data-context="signin"
+                        data-callback="handleGoogleSignIn"
+                        data-scope="openid email profile https://www.googleapis.com/auth/userinfo.profile"
+                        data-ux_mode="popup"
+                        data-prompt="select_account"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin" 
+                        data-type="standard" 
+                        data-size="large" 
+                        data-theme="outline" 
+                        data-text="signin_with" 
+                        data-shape="rectangular" 
+                        data-logo_alignment="left">
+                    </div>
+                </div>
+                
+                <!-- OR divider -->
+                <div class="auth-divider">
+                    <span></span>
+                    <p>OR</p>
+                    <span></span>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="loginBtn">
+                        <span>Login</span>
+                        <div class="spinner hidden"></div>
+                    </button>
+                </form>
+                
+                <div class="auth-links">
+                    <p>Don't have an account? <a href="/register.html">Sign up</a></p>
+                </div>
+                
+                <div class="auth-footer">
+                    <p>By continuing, you agree to ShelfSwap's <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/books.html">Browse Books</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: cxo@shelfswap.com</p>
+                
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShelfSwap. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Messages -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script>
+        // Regular login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Show loading state
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = loginBtn.querySelector('span');
+            const spinner = loginBtn.querySelector('.spinner');
+            btnText.textContent = 'Logging in...';
+            spinner.classList.remove('hidden');
+            loginBtn.disabled = true;
+
+            try {
+                await login(email, password);
+                
+                // Check if there's a redirect URL stored
+                const redirectURL = localStorage.getItem('redirectAfterLogin');
+                if (redirectURL) {
+                    localStorage.removeItem('redirectAfterLogin');
+                    window.location.href = redirectURL;
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('Error during login. Please try again.', 'error');
+                // Reset button state
+                btnText.textContent = 'Login';
+                spinner.classList.add('hidden');
+                loginBtn.disabled = false;
+            }
+        });
+        
+        // Google Sign-In callback function
+        function handleGoogleSignIn(response) {
+            // Get the ID token from the response
+            const idToken = response.credential;
+            
+            // For debugging - log the full response and decode the token
+            console.log("Received Google sign-in response:", response);
+            
+            try {
+                // Base64 decode the token payload (second part of the JWT)
+                const tokenParts = idToken.split('.');
+                if (tokenParts.length >= 2) {
+                    // The payload is in the second part of the JWT
+                    const payload = JSON.parse(atob(tokenParts[1]));
+                    console.log("Decoded token payload:", payload);
+                    
+                    // Log specific parts we need
+                    console.log("Email:", payload.email);
+                    console.log("Name:", payload.name);
+                    console.log("Picture:", payload.picture);
+                    console.log("Email verified:", payload.email_verified);
+                }
+            } catch (e) {
+                console.error("Error decoding token:", e);
+            }
+            
+            // Use the handler for Google authentication
+            handleGoogleAuth(idToken)
+                .catch(error => {
+                    console.error('Google sign-in error:', error);
+                    showToast('Error during Google sign-in. Please try again.', 'error');
+                });
+        }
+    </script>
+    
+    <!-- Add header.js for enhanced user display -->
+    <script src="/js/header.js"></script>
+</body>
+</html> 

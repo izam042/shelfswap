@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Policy - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .policy-hero {
+            background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .policy-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/images/pattern.png') repeat;
+            opacity: 0.1;
+        }
+
+        .policy-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .policy-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .policy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-top: -2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .policy-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .policy-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .policy-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .policy-section h2::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .policy-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .policy-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .policy-section li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .policy-section li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            .policy-hero {
+                padding: 3rem 1rem;
+            }
+
+            .policy-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .policy-content {
+                padding: 3rem 1.5rem;
+                margin: -1.5rem 1rem 0;
+            }
+
+            .policy-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .policy-section p,
+            .policy-section li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="policy-hero">
+        <div class="container">
+            <h1>Shipping Policy</h1>
+            <p>Last updated: April 2024</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="policy-content">
+        <div class="policy-section">
+            <h2>1. Shipping Process</h2>
+            <p>At ShelfSwap, we strive to make the shipping process as smooth as possible for both buyers and sellers. Here's how our shipping works:</p>
+            <ul>
+                <li>Once an order is placed, sellers have 2 business days to prepare the book for pickup</li>
+                <li>Our logistics partner will pick up the book from the seller's address</li>
+                <li>Books are carefully packaged and shipped to the buyer's address</li>
+                <li>Tracking information is provided for all shipments</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>2. Shipping Timeframes</h2>
+            <ul>
+                <li>Standard shipping: 5-7 business days</li>
+                <li>Delivery times may vary based on location and weather conditions</li>
+                <li>Rural areas may experience slightly longer delivery times</li>
+            </ul>
+        </div>
+
+
+        <div class="policy-section">
+            <h2>3. Tracking Your Order</h2>
+            <p>You can track your order through our website or mobile app. We'll send you regular updates about your shipment's status via email and SMS.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>4. International Shipping</h2>
+            <p>Currently, we only ship within India. We are working on expanding our shipping services to other countries in the future.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>5. Lost or Damaged Packages</h2>
+            <p>In the rare event that your package is lost or damaged during transit, please contact our customer support immediately. We will work with our logistics partner to resolve the issue.</p>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/header-footer.js"></script>
+</body>
+</html> 

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .checkout-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .checkout-form h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .order-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            height: fit-content;
+        }
+
+        .order-summary h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .cart-items {
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 120px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-details h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .cart-item-details .author {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-details .price {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-details .quantity {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .order-total {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .order-total p {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .order-total .total {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .btn-checkout {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-checkout:hover {
+            background: var(--primary-dark);
+        }
+
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-spinner p {
+            margin-top: 1rem;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .debug-info {
+            background-color: #ffe8e8;
+            border: 1px solid #ffcaca;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+        <p>Processing your order...</p>
+    </div>
+
+    <main class="checkout-container">
+        <div>
+            <div class="debug-info">
+                <p><strong>Important:</strong> Please fill out the delivery form below before placing your order. All fields are required.</p>
+            </div>
+            
+            <form id="checkoutForm" class="checkout-form" onsubmit="return false;">
+                <h2>Delivery Address</h2>
+                
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" required placeholder="10-digit number">
+                    </div>
+
+                    <div class="form-group">
+                    <label for="addressLine1">Address Line 1</label>
+                    <input type="text" id="addressLine1" name="addressLine1" required>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="addressLine2">Address Line 2</label>
+                    <input type="text" id="addressLine2" name="addressLine2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" name="state" required>
+                    </div>
+
+                <div class="form-group">
+                    <label for="postalCode">Postal Code</label>
+                    <input type="text" id="postalCode" name="postalCode" required placeholder="6-digit code">
+                </div>
+
+                    <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" id="country" name="country" value="India" required>
+                    </div>
+
+                <button type="button" id="placeOrderBtn" class="btn-checkout">Place Order</button>
+                </form>
+            </div>
+
+            <div class="order-summary">
+                <h2>Order Summary</h2>
+            <div id="cartItems" class="cart-items">
+                    <!-- Cart items will be displayed here -->
+                </div>
+                <div class="order-total">
+                <p>Total: <span id="cartTotal">₹0</span></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/header-footer.js"></script>
+    <script src="/js/checkout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Setting up manual order button handler");
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+            if (placeOrderBtn) {
+                placeOrderBtn.addEventListener('click', function(e) {
+                    console.log("Place order button clicked");
+                    if (typeof handleFormSubmit === 'function') {
+                        handleFormSubmit(e);
+                    } else {
+                        alert('Error: handleFormSubmit function not found. Please refresh the page.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

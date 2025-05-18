@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+
+        
+        /* Book Details Container */
+        .book-details-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Book Gallery Container */
+        .book-gallery-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Book image gallery styles */
+        .book-gallery {
+            position: relative;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            background-color: #f5f5f5;
+            margin-bottom: 1rem;
+        }
+        
+        /* Mobile Cart Section */
+        .mobile-cart-section {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+
+        .mobile-action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .mobile-cart-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .desktop-cart-section {
+            display: block;
+            margin-top: 2rem;
+        }
+
+        .desktop-action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .desktop-action-buttons button {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .desktop-price {
+            display: block;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-badge.status-approved {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-badge.status-pending {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-badge.status-sold {
+            background-color: #e8eaf6;
+            color: #3f51b5;
+        }
+
+        .status-badge.status-rejected {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        /* Disabled Button */
+        .btn-disabled {
+            background-color: #e0e0e0;
+            color: #9e9e9e;
+            cursor: not-allowed;
+            border: none;
+        }
+
+        .btn-disabled:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Book Info Section */
+        .book-info {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        @media (min-width: 769px) {
+            .book-details-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                align-items: start;
+            }
+
+            .book-gallery-container {
+                margin: 0;
+            }
+
+            .mobile-cart-section {
+                display: none;
+            }
+
+            .book-info {
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .book-details-container {
+                display: block;
+            }
+
+            .mobile-cart-section {
+                display: block;
+            }
+
+            .desktop-cart-section,
+            .desktop-price {
+                display: none;
+            }
+
+            .book-info {
+                margin-top: 1rem;
+            }
+        }
+
+        .gallery-main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+            background-color: white;
+            display: block;
+        }
+        
+        .gallery-thumbnails {
+            display: flex;
+            margin-top: 10px;
+            gap: 10px;
+            justify-content: center;
+            padding: 5px 0;
+            background-color: #fff;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .gallery-thumbnail {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .gallery-thumbnail.active {
+            opacity: 1;
+            border-color: var(--primary-color);
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        
+        .gallery-nav:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .gallery-nav.prev {
+            left: 10px;
+        }
+        
+        .gallery-nav.next {
+            right: 10px;
+        }
+
+        .book-info h1 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .author {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 1.5rem 0;
+        }
+
+        .details-table {
+            width: 100%;
+            margin: 1rem 0;
+            border-collapse: collapse;
+        }
+
+        .details-table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .details-table th {
+            text-align: left;
+            padding: 0.75rem 0;
+            color: #666;
+            font-weight: 600;
+            width: 40%;
+        }
+
+        .details-table td {
+            padding: 0.75rem 0;
+        }
+
+        .description {
+            margin: 1.5rem 0;
+            line-height: 1.6;
+        }
+
+        .seller-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .gallery-main-image {
+                height: 300px;
+            }
+
+            .book-info {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="header">
+        <div class="logo">
+            <a href="/">
+                <span style="color: #f57c00;">ShelfSwap  </span>
+            </a>
+        </div>
+        <div class="header-right">
+            <a href="/become-seller.html" id="becomeSeller" class="btn btn-outline">Become a Seller</a>
+            <a href="/cart.html" id="cartLink" class="btn btn-outline hidden">
+                <i class="fas fa-shopping-cart"></i> Cart
+            </a>
+            <a href="/login.html" id="loginLink" class="btn btn-primary">Login</a>
+            <a href="/register.html" id="registerLink" class="btn btn-outline">Register</a>
+            
+            <!-- User dropdown (hidden by default, shown when logged in) -->
+            <div class="dropdown hidden" id="userDropdown">
+                <button class="dropdown-btn">
+                    <span id="userEmail">User</span>
+                    <i class="fas fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <!-- Will be populated by auth.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div id="bookDetails">
+            <!-- Book details will be loaded here -->
+        </div>
+        
+        <div class="related-books">
+            <h2>You may also like</h2>
+            <div class="featured-books-grid" id="relatedBooks">
+                <!-- Related books will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ShelfSwap</h3>
+                <p>At ShelfSwap, we're on a mission to revolutionize how students access academic books.</p>
+                <p>Textbooks are expensive, and most second-hand platforms today act like unstructured classifieds—no payments, no delivery, no guarantees. We're changing that by offering a seamless experience for used books that's built by students, for students.</p>
+    
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/books.html">Browse Books</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: Cxo@shelfswap.com</p>
+                
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShelfSwap. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/book-details.js"></script>
+    <script src="/js/utils.js"></script>
+    <!-- Toast Messages -->
+    <div class="toast-container" id="toastContainer"></div>
+</body>
+</html> 

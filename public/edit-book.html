@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">ShelfSwap</a>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/books.html" class="nav-link">Browse Books</a>
+            <div class="auth-links">
+                <a href="/login.html" id="loginLink">Login</a>
+                <a href="/register.html" id="registerLink">Register</a>
+                <div class="dropdown hidden" id="userDropdown">
+                    <button class="dropdown-btn">
+                        <span id="userEmail"></span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/profile.html">Profile</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2>Edit Book</h2>
+                <p class="info-text">Update the details of your book listing.</p>
+                
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="title">Book Title</label>
+                        <input type="text" id="title" name="title" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" name="author" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price (₹)</label>
+                        <input type="number" id="price" name="price" class="form-control" min="0" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="condition">Condition</label>
+                        <select id="condition" name="condition" class="form-control" required>
+                            <option value="new">New</option>
+                            <option value="like_new">Like New</option>
+                            <option value="good">Good</option>
+                            <option value="fair">Fair</option>
+                            <option value="poor">Poor</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" class="form-control" required>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Law">Law</option>
+                            <option value="Business">Business</option>
+                            <option value="CompetitiveExams">Competitive Exams</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Book Images (All 3 images required)</label>
+                        
+                        <div class="book-image-upload">
+                            <div class="image-upload-item">
+                                <label for="frontImage">Front Cover</label>
+                                <input type="file" id="frontImage" name="frontImage" class="form-control" accept="image/*">
+                                <div id="frontImagePreview" class="image-preview"></div>
+                            </div>
+                            
+                            <div class="image-upload-item">
+                                <label for="backImage">Back Cover</label>
+                                <input type="file" id="backImage" name="backImage" class="form-control" accept="image/*">
+                                <div id="backImagePreview" class="image-preview"></div>
+                            </div>
+                            
+                            <div class="image-upload-item">
+                                <label for="insideImage">Inside Page</label>
+                                <input type="file" id="insideImage" name="insideImage" class="form-control" accept="image/*">
+                                <div id="insideImagePreview" class="image-preview"></div>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Upload new images only if you want to replace the existing ones.</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Update Book</button>
+                        <a href="/my-books.html" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About ShelfSwap</h3>
+                <p>A marketplace for students to buy and sell used academic books.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/books.html">Browse Books</a></li>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@shelfswap.com</p>
+                <p>Phone: +91 123-456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShelfSwap. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner hidden" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Messages -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await getCurrentUser();
+            if (!user) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            if (user.role !== 'seller') {
+                window.location.href = '/become-seller.html';
+                return;
+            }
+
+            // Get book ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('id');
+
+            if (!bookId) {
+                window.location.href = '/my-books.html';
+                return;
+            }
+
+            // Setup image preview functionality
+            setupImagePreview('frontImage', 'frontImagePreview');
+            setupImagePreview('backImage', 'backImagePreview');
+            setupImagePreview('insideImage', 'insideImagePreview');
+            
+            function setupImagePreview(inputId, previewId) {
+                document.getElementById(inputId).addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const preview = document.getElementById(previewId);
+                            preview.innerHTML = `<img src="${e.target.result}" alt="Book preview">`;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Load book details
+            try {
+                showLoadingSpinner();
+                const response = await fetch(`/api/sellers/books/${bookId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+
+                const book = await response.json();
+
+                if (response.ok) {
+                    // Populate form with book details
+                    document.getElementById('title').value = book.title;
+                    document.getElementById('author').value = book.author;
+                    document.getElementById('description').value = book.description;
+                    document.getElementById('price').value = book.price;
+                    document.getElementById('condition').value = book.condition;
+                    document.getElementById('category').value = book.category;
+
+                    // Show current images
+                    if (book.frontImage) {
+                        document.getElementById('frontImagePreview').innerHTML = `<img src="${book.frontImage}" alt="Front cover">`;
+                    }
+                    if (book.backImage) {
+                        document.getElementById('backImagePreview').innerHTML = `<img src="${book.backImage}" alt="Back cover">`;
+                    }
+                    if (book.insideImage) {
+                        document.getElementById('insideImagePreview').innerHTML = `<img src="${book.insideImage}" alt="Inside page">`;
+                    }
+
+                    // Form submission
+                    document.getElementById('editForm').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        
+                        const formData = new FormData();
+                        formData.append('title', document.getElementById('title').value);
+                        formData.append('author', document.getElementById('author').value);
+                        formData.append('description', document.getElementById('description').value);
+                        formData.append('price', document.getElementById('price').value);
+                        formData.append('condition', document.getElementById('condition').value);
+                        formData.append('category', document.getElementById('category').value);
+                        
+                        // Add any new images that were uploaded
+                        const frontImage = document.getElementById('frontImage').files[0];
+                        const backImage = document.getElementById('backImage').files[0];
+                        const insideImage = document.getElementById('insideImage').files[0];
+                        
+                        if (frontImage) formData.append('frontImage', frontImage);
+                        if (backImage) formData.append('backImage', backImage);
+                        if (insideImage) formData.append('insideImage', insideImage);
+                        
+                        try {
+                            showLoadingSpinner();
+                            const response = await fetch(`/api/sellers/books/${bookId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Authorization': `Bearer ${getToken()}`
+                                },
+                                body: formData
+                            });
+
+                            const data = await response.json();
+
+                            if (response.ok) {
+                                showToast('Book updated successfully!', 'success');
+                                setTimeout(() => {
+                                    window.location.href = '/my-books.html';
+                                }, 2000);
+                            } else {
+                                showToast(data.message || 'Failed to update book', 'error');
+                            }
+                        } catch (err) {
+                            console.error('Error updating book:', err);
+                            showToast('Error updating book. Please try again.', 'error');
+                        } finally {
+                            hideLoadingSpinner();
+                        }
+                    });
+                } else {
+                    showToast('Failed to load book details', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/my-books.html';
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error('Error loading book:', err);
+                showToast('Error loading book. Please try again.', 'error');
+                setTimeout(() => {
+                    window.location.href = '/my-books.html';
+                }, 2000);
+            } finally {
+                hideLoadingSpinner();
+            }
+        });
+    </script>
+</body>
+</html> 

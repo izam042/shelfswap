@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refunds and Cancellations - ShelfSwap</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .policy-hero {
+            background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .policy-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/images/pattern.png') repeat;
+            opacity: 0.1;
+        }
+
+        .policy-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .policy-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .policy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-top: -2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .policy-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .policy-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .policy-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .policy-section h2::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .policy-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .policy-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .policy-section li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .policy-section li::before {
+            content: '•';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            .policy-hero {
+                padding: 3rem 1rem;
+            }
+
+            .policy-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .policy-content {
+                padding: 3rem 1.5rem;
+                margin: -1.5rem 1rem 0;
+            }
+
+            .policy-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .policy-section p,
+            .policy-section li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="policy-hero">
+        <div class="container">
+            <h1>Refunds and Cancellations</h1>
+            <p>Last updated: April 2024</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="policy-content">
+        <div class="policy-section">
+            <h2>1. Order Cancellation</h2>
+            <p>You can cancel your order under the following conditions:</p>
+            <ul>
+                <li>Before the seller has shipped the book</li>
+                <li>Within 1 hour of placing the order</li>
+                <li>If the seller fails to ship within 2 business days</li>
+            </ul>
+            <p>To cancel an order, please contact our customer support or use the cancellation option in your order history.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>2. Refund Policy</h2>
+            <p>We offer refunds in the following cases:</p>
+            <ul>
+                <li>If the book received is significantly different from the description</li>
+                <li>If the book is damaged during shipping</li>
+                <li>If the wrong book is delivered</li>
+                <li>If the order is cancelled before shipping</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>3. Refund Process</h2>
+            <ul>
+                <li>Refund requests must be made within 7 days of receiving the book</li>
+                <li>You may be required to provide photos of the damaged or incorrect book</li>
+                <li>Refunds are processed within 5-7 business days</li>
+                <li>Refunds are issued to the original payment method</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>4. Non-Refundable Items</h2>
+            <p>The following are not eligible for refunds:</p>
+            <ul>
+                <li>Books with minor wear and tear as described in the listing</li>
+                <li>Books that have been written in or highlighted</li>
+                <li>Digital content or access codes</li>
+                <li>Shipping charges (unless the return is due to our error)</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>5. Return Shipping</h2>
+            <p>If a return is approved:</p>
+            <ul>
+                <li>We will provide a prepaid return shipping label</li>
+                <li>Books must be returned in their original condition</li>
+                <li>Returns must be shipped within 7 days of approval</li>
+                <li>Refund will be processed after we receive and verify the returned book</li>
+            </ul>
+        </div>
+
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/header-footer.js"></script>
+</body>
+</html> 
